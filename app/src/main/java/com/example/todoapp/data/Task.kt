@@ -11,11 +11,10 @@ data class Task (
     val id: Int = 0,
     val title: String,
     val description: String,
-    val createDateTime: String,
-    val dueDateTime: String,
-    val isDone: Boolean,
+    val createDateTime: LocalDateTime,
+    val dueDateTime: LocalDateTime,
+    var isDone: Boolean,
     val isNotificationEnable: Boolean,
-    //TODO: Add Category foreign key
     val category: String,
     //TODO: Add Attachments
 )

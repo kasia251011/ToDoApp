@@ -1,32 +1,34 @@
 package com.example.todoapp.ui.task.add
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.todoapp.Category
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
 import com.example.todoapp.ui.ToDoTopAppBar
+import com.example.todoapp.ui.common.Select
 import com.example.todoapp.ui.navigation.NavigationDestination
 import com.example.todoapp.ui.theme.ToDoAppTheme
 import kotlinx.coroutines.launch
+import java.util.*
 
 object AddTaskDestination : NavigationDestination {
     override val route = "task_add"
     override val title = "Add New Task"
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddTaskScreen(
     navigateBack: () -> Unit,
@@ -44,7 +46,7 @@ fun AddTaskScreen(
         }
     ) { innerPadding ->
         AddTaskBody(
-            taskUiState = viewModel.taskUiState,
+            taskUiState = viewModel.addTaskUiState,
             onItemValueChange = viewModel::updateUiState,
             onSaveClick = {
                 coroutineScope.launch {
@@ -52,17 +54,18 @@ fun AddTaskScreen(
                     navigateBack()
                 }
             },
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         )
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddTaskBody(
-    taskUiState: TaskUiState,
+    taskUiState: AddTaskUiState,
     onItemValueChange: (Task) -> Unit,
     onSaveClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     Column(
         modifier = modifier
@@ -80,33 +83,34 @@ fun AddTaskBody(
         }
     }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ItemInputForm(
     task: Task,
     modifier: Modifier = Modifier,
-    onValueChange: (Task) -> Unit = {},
-    enabled: Boolean = true
+    onValueChange: (Task) -> Unit = {}
 ) {
+    val categoryOptions = listOf(Category.Home, Category.Office, Category.Other, Category.School)
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         OutlinedTextField(
             value = task.title ,
             onValueChange = { onValueChange(task.copy(title = it)) },
             label = { Text("Title") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
         OutlinedTextField(
-            value = task.category,
-            onValueChange = { onValueChange(task.copy(category = it)) },
-            label = { Text("Category") },
+            value = task.description,
+            onValueChange = { onValueChange(task.copy(description = it)) },
+            label = { Text("Description") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
+            maxLines = 10,
         )
+        Select(label = "Category", options = categoryOptions, task = task, onValueChange = onValueChange)
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ItemEditRoutePreview() {

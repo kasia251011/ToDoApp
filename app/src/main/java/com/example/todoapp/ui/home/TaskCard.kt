@@ -1,5 +1,7 @@
 package com.example.todoapp.ui.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,19 +17,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
 import com.example.todoapp.data.Task
+import com.example.todoapp.ui.task.details.TaskDetailsDestination
 import com.example.todoapp.ui.theme.Blue
-import com.example.todoapp.ui.theme.Grey
+import com.example.todoapp.ui.theme.DarkGrey
 import com.example.todoapp.ui.theme.LightGrey
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskCard(
     task: Task,
-    onTaskClick: (Task) -> Unit,
+    onTaskClick: (String) -> Unit,
 ) {
     Column(
         Modifier
@@ -35,7 +39,7 @@ fun TaskCard(
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .padding(20.dp)
             .fillMaxWidth()
-            .clickable { onTaskClick(task) }
+            .clickable { onTaskClick("${TaskDetailsDestination.route}/${task.id}") }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -43,7 +47,7 @@ fun TaskCard(
         ) {
             Column {
                 Text(task.title, fontSize = 18.sp)
-                Text(task.category, color = Grey, fontSize = 15.sp, modifier =  Modifier.padding(top = 5.dp))
+                Text(task.category, color = DarkGrey, fontSize = 15.sp, modifier =  Modifier.padding(top = 5.dp))
             }
             if(task.isDone) {
                 Box(
@@ -62,26 +66,27 @@ fun TaskCard(
                 Box(
                     Modifier
                         .border(1.dp, LightGrey, shape = CircleShape)
-                        .size(25.dp)) {
+                        .size(35.dp)) {
                 }
             }
 
         }
         Divider(Modifier.padding(top = 20.dp, bottom = 20.dp), color = LightGrey)
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
+            val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
             Text(
-                "Due: ${task.dueDateTime}",
-                color = Grey,
+                "Due: ${task.dueDateTime.format(dateFormat)}",
+                color = DarkGrey,
                 fontSize = 15.sp
             )
             Row(verticalAlignment = Alignment.CenterVertically,) {
                 Icon(
                     painter = painterResource(R.drawable.attachemnt),
                     "attachment",
-                    tint = Grey,
+                    tint = DarkGrey,
                     modifier = Modifier.size(15.dp)
                 )
-                Text("0 Attachments", Modifier.padding(start = 10.dp), color = Grey, fontSize = 15.sp)
+                Text("0 Attachments", Modifier.padding(start = 10.dp), color = DarkGrey, fontSize = 15.sp)
             }
         }
     }

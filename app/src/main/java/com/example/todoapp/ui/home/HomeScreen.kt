@@ -17,18 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.R
 import com.example.todoapp.capitalizeWords
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
 import com.example.todoapp.ui.navigation.NavigationDestination
-import com.example.todoapp.ui.theme.Grey
+import com.example.todoapp.ui.task.details.TaskDetailsDestination
+import com.example.todoapp.ui.theme.DarkGrey
 import com.example.todoapp.ui.theme.ToDoAppTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -41,7 +40,7 @@ object HomeDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
-    navigateToTaskEntry: () -> Unit,
+    navigateToTaskDetails: (String) -> Unit,
     navigateToAddTask: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -64,7 +63,7 @@ fun HomeScreen(
     ) { innerPadding ->
         HomeBody(
             taskList = homeUiState.itemList,
-            onTaskClick = navigateToTaskEntry,
+            onTaskClick = navigateToTaskDetails,
             modifier = modifier.padding(innerPadding)
         )
     }
@@ -74,7 +73,7 @@ fun HomeScreen(
 @Composable
 fun HomeBody (
     taskList: List<Task>,
-    onTaskClick: () -> Unit,
+    onTaskClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -93,15 +92,16 @@ fun HomeBody (
                     modifier = Modifier.align(Alignment.Center))
             }
         } else {
-            TaskList(taskList = taskList, onTaskClick = { onTaskClick() })
+            TaskList(taskList = taskList, onTaskClick = onTaskClick)
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun TaskList(
     taskList: List<Task>,
-    onTaskClick: (Task) -> Unit,
+    onTaskClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -122,8 +122,8 @@ fun Header () {
         val formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd")
         val dateTime = capitalizeWords(LocalDateTime.now().format(formatter))
         Column {
-            Text("Your Tasks", color = Color(0xFF303030), fontSize = 30.sp, fontWeight = FontWeight.Bold)
-            Text(dateTime, color = Grey)
+            Text("Your Tasks", style = MaterialTheme.typography.h1)
+            Text(dateTime, color = DarkGrey)
         }
         Box (
             Modifier
@@ -132,7 +132,7 @@ fun Header () {
             Icon(
                 painter = painterResource(R.drawable.settings),
                 "settings",
-                tint = Grey,
+                tint = DarkGrey,
                 modifier = Modifier.size(25.dp)
             )
         }
@@ -143,6 +143,7 @@ fun Header () {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenRoutePreview() {
+    val defaultDate =  LocalDateTime.parse("01-06-2022T11:30:10")
     ToDoAppTheme {
         HomeBody(
             listOf(
@@ -150,8 +151,8 @@ fun HomeScreenRoutePreview() {
                     1,
                     "Complete Project Proposal",
                     "Write a detailed project proposal for the upcoming conference",
-                    "21.07.23",
-                    "21.07.23",
+                    defaultDate,
+                    defaultDate,
                     isDone = false,
                     isNotificationEnable = true,
                     "Work"
@@ -160,8 +161,8 @@ fun HomeScreenRoutePreview() {
                     2,
                     "Buy Groceries",
                     "Purchase items for the week, including fruits, vegetables, and bread.",
-                    "21.07.23",
-                    "21.07.23",
+                    defaultDate,
+                    defaultDate,
                     isDone = true,
                     isNotificationEnable = true,
                     "Personal"
@@ -170,8 +171,8 @@ fun HomeScreenRoutePreview() {
                     3,
                     "Read Book",
                     "Finish reading 'The Great Gatsby' novel by F. Scott Fitzgerald.",
-                    "21.07.23",
-                    "21.07.23",
+                    defaultDate,
+                    defaultDate,
                     isDone = false,
                     isNotificationEnable = false,
                     "Leisure"

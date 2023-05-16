@@ -9,7 +9,9 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.ui.navigation.ToDoNavHost
@@ -24,11 +26,11 @@ fun ToDoApp(navController: NavHostController = rememberNavController()) {
 fun ToDoTopAppBar(
     title: String,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit = {},
 ) {
     if (canNavigateBack) {
         TopAppBar(
-            title = { Text(title) },
+            title = { Text(title, fontSize = 15.sp) },
             navigationIcon = {
                 IconButton(onClick = navigateUp) {
                     Icon(
@@ -36,9 +38,10 @@ fun ToDoTopAppBar(
                         contentDescription = "Back"
                     )
                 }
-            }
+            },
+            backgroundColor = Color.White
         )
     } else {
-        TopAppBar(title = { Text(title) })
+        TopAppBar(title = { Text(title) }, backgroundColor = Color.White)
     }
 }

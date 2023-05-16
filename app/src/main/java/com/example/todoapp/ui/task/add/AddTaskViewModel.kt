@@ -1,5 +1,7 @@
 package com.example.todoapp.ui.task.add
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,52 +10,38 @@ import com.example.todoapp.data.TasksRepository
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * View Model to validate and insert tasks in the Room database.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 class AddTaskViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
 
-    /**
-     * Holds current task ui state
-     */
-    var taskUiState by mutableStateOf(TaskUiState())
+
+    var addTaskUiState by mutableStateOf(AddTaskUiState())
         private set
 
-    /**
-     * Updates the [taskUiState] with the value provided in the argument. This method also triggers
-     * a validation for input values.
-     */
     init {
         viewModelScope.launch {
-            taskUiState = Task(
-                0,
-                "",
-                "",
-                "",
-                "",
-                isDone = false,
-                isNotificationEnable = false,
-                "").toTaskUiState()
+            addTaskUiState = AddTaskUiState()
         }
     }
-
 
     fun updateUiState(task: Task) {
-        taskUiState = TaskUiState(task, validateInput(task))
+        addTaskUiState = AddTaskUiState(task, validateInput(task))
     }
 
 
-    /**
-     * Inserts an [Task] in the Room database
-     */
     suspend fun saveTask() {
         if (validateInput()) {
-            tasksRepository.insertTask(taskUiState.task)
+            updateUiState(addTaskUiState.task.copy(createDateTime = LocalDateTime.now()))
+            tasksRepository.insertTask(addTaskUiState.task)
         }
     }
 
-    private fun validateInput(uiState: Task = taskUiState.task): Boolean {
+    private fun validateInput(uiState: Task = addTaskUiState.task): Boolean {
         return with(uiState) {
             title.isNotBlank() && category.isNotBlank()
         }
@@ -64,13 +52,14 @@ class AddTaskViewModel(private val tasksRepository: TasksRepository) : ViewModel
 /**
  * Represents Ui State for an Item.
  */
-data class TaskUiState(
+@RequiresApi(Build.VERSION_CODES.O)
+data class AddTaskUiState constructor(
     val task: Task = Task(
         0,
         "",
         "",
-        "",
-        "",
+        LocalDateTime.parse("01/06/2022 11:30:10", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+        LocalDateTime.parse("01/06/2022 11:30:10", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
         isDone = false,
         isNotificationEnable = false,
         ""),
@@ -78,10 +67,7 @@ data class TaskUiState(
 )
 
 /**
- * Extension function to convert [Task] to [TaskUiState]
+ * Extension function to convert [Task] to [AddTaskUiState]
  */
-fun Task.toTaskUiState(isEntryValid: Boolean = false): TaskUiState = TaskUiState(
-    task = this,
-    isEntryValid = isEntryValid
-)
+
 
