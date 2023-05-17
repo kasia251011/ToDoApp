@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import com.example.todoapp.ui.task.add.AddTaskUiState
+import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TaskDetailsViewModel (
@@ -31,12 +32,14 @@ class TaskDetailsViewModel (
 
     init {
         viewModelScope.launch {
+            println("DETAILS-----------------$taskId")
             uiState = tasksRepository.getTaskStream(taskId)
                 .filterNotNull()
                 .first()
                 .toTaskUiState()
         }
     }
+
 
     fun updateState(task: Task) {
         viewModelScope.launch {
@@ -66,8 +69,8 @@ data class TaskDetailsUiState  constructor(
         0,
         "",
         "",
-        LocalDateTime.parse("2022-01-06T21:30:10"),
-        LocalDateTime.parse("2022-01-06T21:30:10"),
+        Calendar.getInstance(),
+        Calendar.getInstance(),
         isDone = false,
         isNotificationEnable = false,
         ""),

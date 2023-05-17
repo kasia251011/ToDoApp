@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.task.add
+package com.example.todoapp.ui.task.edit
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -24,28 +24,30 @@ import com.example.todoapp.ui.theme.ToDoAppTheme
 import kotlinx.coroutines.launch
 import java.util.*
 
-object AddTaskDestination : NavigationDestination {
-    override val route = "task_add"
-    override val title = "Add New Task"
+object EditTaskDestination : NavigationDestination {
+    override val route = "edit_task"
+    override val title = "Edit Task"
+    const val taskIdArg = "taskIdd"
+    val routeWithArgs = "$route/{$taskIdArg}"
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddTaskScreen(
+fun EditTaskScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
-    viewModel: AddTaskViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: EditTaskViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TaskAppBar(
                 navigateBack = navigateBack,
-                title= "Add Task",
-                actionEnabled = viewModel.addTaskUiState.isEntryValid,
+                title= "Edit Task",
+                actionEnabled = viewModel.editTaskUiState.isEntryValid,
                 handleAction = {
                     coroutineScope.launch {
-                        viewModel.saveTask()
+                        viewModel.updateTask()
                         navigateBack()
                     }
                 }
@@ -53,7 +55,7 @@ fun AddTaskScreen(
         }
     ) { innerPadding ->
         AddTaskBody(
-            task = viewModel.addTaskUiState.task,
+            task = viewModel.editTaskUiState.task,
             updateTaskUiState = viewModel::updateTaskUiState,
             modifier = Modifier.padding(innerPadding),
         )
@@ -89,12 +91,11 @@ fun AddTaskBody(
 }
 
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ItemEditRoutePreview() {
     ToDoAppTheme {
-        AddTaskScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
+        EditTaskScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
     }
 }

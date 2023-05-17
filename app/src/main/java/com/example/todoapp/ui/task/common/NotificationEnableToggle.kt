@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.task.details.components
+package com.example.todoapp.ui.task.add.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,20 +13,20 @@ import com.example.todoapp.data.Task
 import com.example.todoapp.ui.theme.Black
 
 @Composable
-fun ToggleNotificationEnable(task: Task, updateState: (Task) -> Unit) {
+fun NotificationEnableToggle(task: Task, updateState: (Task) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
             Icon(
                 painter = painterResource(R.drawable.notify),
                 "notify",
                 tint = Black,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(25.dp)
             )
-            Text("Notifications", Modifier.padding(start = 10.dp))
+            Text("Notifications")
         }
 
         Switch(

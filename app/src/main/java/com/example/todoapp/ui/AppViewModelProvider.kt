@@ -12,6 +12,7 @@ import com.example.todoapp.ToDoApplication
 import com.example.todoapp.ui.home.HomeViewModel
 import com.example.todoapp.ui.task.add.AddTaskViewModel
 import com.example.todoapp.ui.task.details.TaskDetailsViewModel
+import com.example.todoapp.ui.task.edit.EditTaskViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 object AppViewModelProvider {
@@ -30,6 +31,13 @@ object AppViewModelProvider {
 
         initializer {
             TaskDetailsViewModel(
+                this.createSavedStateHandle(),
+                toDoApplication().container.tasksRepository
+            )
+        }
+
+        initializer {
+            EditTaskViewModel(
                 this.createSavedStateHandle(),
                 toDoApplication().container.tasksRepository
             )

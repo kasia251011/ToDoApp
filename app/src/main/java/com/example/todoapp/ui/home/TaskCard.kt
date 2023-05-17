@@ -1,5 +1,6 @@
 package com.example.todoapp.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -20,13 +21,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.R
+import com.example.todoapp.calendarToString
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.task.details.TaskDetailsDestination
 import com.example.todoapp.ui.theme.Blue
 import com.example.todoapp.ui.theme.DarkGrey
 import com.example.todoapp.ui.theme.LightGrey
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.util.*
 
+@SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskCard(
@@ -73,9 +78,9 @@ fun TaskCard(
         }
         Divider(Modifier.padding(top = 20.dp, bottom = 20.dp), color = LightGrey)
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
-            val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+
             Text(
-                "Due: ${task.dueDateTime.format(dateFormat)}",
+                "Due: ${calendarToString(task.dueDateTime)}",
                 color = DarkGrey,
                 fontSize = 15.sp
             )

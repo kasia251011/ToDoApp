@@ -11,13 +11,15 @@ import java.util.*
 class Converters {
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun fromTimestamp(value: Long?): LocalDateTime? {
-        return value?.let { LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC) }
+    fun fromTimestamp(value: Long?): Calendar? {
+        val calendar = Calendar.getInstance();
+        calendar.timeInMillis = value ?: 0;
+        return calendar
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun dateToTimestamp(date: LocalDateTime?): Long? {
-        return date?.toEpochSecond(ZoneOffset.UTC)
+    fun dateToTimestamp(date: Calendar?): Long? {
+        return date?.timeInMillis
     }
 }

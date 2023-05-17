@@ -31,6 +31,7 @@ import com.example.todoapp.ui.theme.DarkGrey
 import com.example.todoapp.ui.theme.ToDoAppTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 object HomeDestination : NavigationDestination {
     override val route = "home"
@@ -143,7 +144,7 @@ fun Header () {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenRoutePreview() {
-    val defaultDate =  LocalDateTime.parse("01-06-2022T11:30:10")
+    val defaultDate =  Calendar.getInstance()
     ToDoAppTheme {
         HomeBody(
             listOf(

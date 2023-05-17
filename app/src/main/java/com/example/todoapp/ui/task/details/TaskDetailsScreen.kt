@@ -4,37 +4,26 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.todoapp.R
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
-import com.example.todoapp.ui.ToDoTopAppBar
 import com.example.todoapp.ui.navigation.NavigationDestination
-import com.example.todoapp.ui.task.details.components.ChangeTaskCategory
 import com.example.todoapp.ui.task.details.components.TaskDates
 import com.example.todoapp.ui.task.details.components.TaskHeader
-import com.example.todoapp.ui.task.details.components.ToggleNotificationEnable
+import com.example.todoapp.ui.task.edit.TaskDetailsAppBar
 import com.example.todoapp.ui.theme.*
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 object TaskDetailsDestination : NavigationDestination {
     override val route = "task_details"
-    override val title = "Task details"
+    override val title = "Task Details"
     const val taskIdArg = "taskId"
     val routeWithArgs = "$route/{$taskIdArg}"
 }
@@ -42,7 +31,7 @@ object TaskDetailsDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskDetailsScreen(
-    navigateToEditItem: (Int) -> Unit,
+    navigate: (String) -> Unit,
     navigateBack: () -> Unit,
     viewModel: TaskDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -51,10 +40,11 @@ fun TaskDetailsScreen(
 
     Scaffold(
         topBar = {
-            ToDoTopAppBar(
-                title = "Task details",
-                canNavigateBack = true,
-                navigateUp = navigateBack
+            TaskDetailsAppBar(
+                navigateBack = navigateBack,
+                deleteTask = { },
+                navigate = navigate,
+                task = task
             )
         }
     ) { innerPadding ->
@@ -87,19 +77,12 @@ private fun TaskDetailsBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        var temp by rememberSaveable { mutableStateOf("") }
 
         TaskHeader(task, updateState)
         Text(task.description)
         TaskDates(task)
         Divider(color = LightGrey)
-        ToggleNotificationEnable(task, updateState)
-        Divider(color = LightGrey)
-        ChangeTaskCategory(task, updateState)
-//        Divider()
-//        BasicTextField(value = temp, onValueChange = {temp = it})
-
-//        AddAttachment({})
+        //TODO: Display files
 
 
         if (deleteConfirmationRequired) {
@@ -113,6 +96,7 @@ private fun TaskDetailsBody(
         }
     }
 }
+
 
 
 
@@ -146,7 +130,7 @@ private fun DeleteConfirmationDialog(
 @Composable
 fun ItemDetailsScreenPreview() {
     ToDoAppTheme {
-        val defaultDate =  LocalDateTime.parse("01-06-2022T11:30:10")
+        val defaultDate =  Calendar.getInstance()
         TaskDetailsBody(
             task = Task(
                 3,

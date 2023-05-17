@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * View Model to validate and insert tasks in the Room database.
@@ -29,14 +30,14 @@ class AddTaskViewModel(private val tasksRepository: TasksRepository) : ViewModel
         }
     }
 
-    fun updateUiState(task: Task) {
+    fun updateTaskUiState(task: Task) {
         addTaskUiState = AddTaskUiState(task, validateInput(task))
     }
 
 
     suspend fun saveTask() {
         if (validateInput()) {
-            updateUiState(addTaskUiState.task.copy(createDateTime = LocalDateTime.now()))
+//            updateTaskUiState(addTaskUiState.task.copy())
             tasksRepository.insertTask(addTaskUiState.task)
         }
     }
@@ -58,8 +59,8 @@ data class AddTaskUiState constructor(
         0,
         "",
         "",
-        LocalDateTime.parse("01/06/2022 11:30:10", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-        LocalDateTime.parse("01/06/2022 11:30:10", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+       Calendar.getInstance(),
+        Calendar.getInstance(),
         isDone = false,
         isNotificationEnable = false,
         ""),
