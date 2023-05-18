@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.task.add.components
+package com.example.todoapp.ui.task.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -15,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.data.Task
-import com.example.todoapp.ui.theme.Black
 
 @Composable
 fun TitleTextField (task: Task, updateTaskUiState: (Task) -> Unit) {

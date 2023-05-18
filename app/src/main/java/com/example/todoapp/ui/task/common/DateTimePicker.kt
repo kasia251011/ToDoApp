@@ -1,4 +1,4 @@
-package com.example.todoapp.ui.task.add.components
+package com.example.todoapp.ui.task.common
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog

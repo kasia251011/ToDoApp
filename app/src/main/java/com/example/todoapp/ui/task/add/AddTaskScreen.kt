@@ -4,21 +4,16 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
 import com.example.todoapp.ui.navigation.NavigationDestination
-import com.example.todoapp.ui.task.add.components.*
-import com.example.todoapp.ui.task.common.TaskAppBar
+import com.example.todoapp.ui.task.common.*
 import com.example.todoapp.ui.theme.LightGrey
 import com.example.todoapp.ui.theme.ToDoAppTheme
 import kotlinx.coroutines.launch
@@ -33,7 +28,6 @@ object AddTaskDestination : NavigationDestination {
 @Composable
 fun AddTaskScreen(
     navigateBack: () -> Unit,
-    onNavigateUp: () -> Unit,
     viewModel: AddTaskViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -95,6 +89,6 @@ fun AddTaskBody(
 @Composable
 fun ItemEditRoutePreview() {
     ToDoAppTheme {
-        AddTaskScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
+        AddTaskScreen(navigateBack = { /*Do nothing*/ })
     }
 }

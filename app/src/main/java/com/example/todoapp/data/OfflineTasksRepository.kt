@@ -1,12 +1,15 @@
 package com.example.todoapp.data
 
-import com.example.todoapp.data.Task
-import com.example.todoapp.data.TaskDao
-import com.example.todoapp.data.TasksRepository
 import kotlinx.coroutines.flow.Flow
 
 class OfflineItemsRepository(private val taskDao: TaskDao) : TasksRepository {
-    override fun getAllNotFinishedTasksStream(): Flow<List<Task>> = taskDao.getAllNotFinishedTasks()
+    override fun getAllTasksStream(): Flow<List<Task>> = taskDao.getAllTasks()
+
+    override fun getAllTasksByCategories(categories: Array<String?>): Flow<List<Task>> =
+        taskDao.getAllTasksByCategories(categories)
+
+    override fun getAllTasksByTitle(title: String): Flow<List<Task>> =
+        taskDao.getAllTasksByTitle(title)
 
     override fun getTaskStream(id: Int): Flow<Task?> = taskDao.getTask(id)
 

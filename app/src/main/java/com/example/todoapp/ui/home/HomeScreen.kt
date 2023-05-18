@@ -3,7 +3,6 @@ package com.example.todoapp.ui.home
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,8 +24,8 @@ import com.example.todoapp.R
 import com.example.todoapp.capitalizeWords
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
+import com.example.todoapp.ui.home.components.SearchBar
 import com.example.todoapp.ui.navigation.NavigationDestination
-import com.example.todoapp.ui.task.details.TaskDetailsDestination
 import com.example.todoapp.ui.theme.DarkGrey
 import com.example.todoapp.ui.theme.ToDoAppTheme
 import java.time.LocalDateTime
@@ -43,10 +42,11 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     navigateToTaskDetails: (String) -> Unit,
     navigateToAddTask: () -> Unit,
+    navigateToSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: HomeViewModel
 ) {
-    val homeUiState by viewModel.homeUiState.collectAsState()
+    val homeUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         floatingActionButton = {
@@ -65,7 +65,9 @@ fun HomeScreen(
         HomeBody(
             taskList = homeUiState.itemList,
             onTaskClick = navigateToTaskDetails,
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding),
+            navigateToSettings,
+            filterTasks = viewModel::filterTasks
         )
     }
 }
@@ -75,7 +77,9 @@ fun HomeScreen(
 fun HomeBody (
     taskList: List<Task>,
     onTaskClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToSettings: () -> Unit,
+    filterTasks: (String?, List<String>?, Boolean?) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -83,7 +87,8 @@ fun HomeBody (
             .background(Color(0xFFF9F9F9))
             .padding(20.dp)
     ) {
-        Header()
+        Header(navigateToSettings)
+        SearchBar(filterTasks)
         if (taskList.isEmpty()) {
             Box(
                 Modifier.fillMaxSize()) {
@@ -114,7 +119,7 @@ private fun TaskList(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Header () {
+fun Header (navigateToSettings: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -126,10 +131,7 @@ fun Header () {
             Text("Your Tasks", style = MaterialTheme.typography.h1)
             Text(dateTime, color = DarkGrey)
         }
-        Box (
-            Modifier
-                .clickable {/*TODO: Navigate to settings */ }
-        ) {
+        IconButton (navigateToSettings) {
             Icon(
                 painter = painterResource(R.drawable.settings),
                 "settings",
@@ -137,49 +139,5 @@ fun Header () {
                 modifier = Modifier.size(25.dp)
             )
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenRoutePreview() {
-    val defaultDate =  Calendar.getInstance()
-    ToDoAppTheme {
-        HomeBody(
-            listOf(
-                Task(
-                    1,
-                    "Complete Project Proposal",
-                    "Write a detailed project proposal for the upcoming conference",
-                    defaultDate,
-                    defaultDate,
-                    isDone = false,
-                    isNotificationEnable = true,
-                    "Work"
-                ),
-                Task(
-                    2,
-                    "Buy Groceries",
-                    "Purchase items for the week, including fruits, vegetables, and bread.",
-                    defaultDate,
-                    defaultDate,
-                    isDone = true,
-                    isNotificationEnable = true,
-                    "Personal"
-                ),
-                Task(
-                    3,
-                    "Read Book",
-                    "Finish reading 'The Great Gatsby' novel by F. Scott Fitzgerald.",
-                    defaultDate,
-                    defaultDate,
-                    isDone = false,
-                    isNotificationEnable = false,
-                    "Leisure"
-                ),
-            ),
-            onTaskClick = {}
-        )
     }
 }

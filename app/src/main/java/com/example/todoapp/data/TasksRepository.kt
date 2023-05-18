@@ -3,7 +3,11 @@ package com.example.todoapp.data
 import kotlinx.coroutines.flow.Flow
 
 interface TasksRepository {
-    fun getAllNotFinishedTasksStream(): Flow<List<Task>>
+    fun getAllTasksStream(): Flow<List<Task>>
+
+    fun getAllTasksByCategories(categories: Array<String?>): Flow<List<Task>>
+
+    fun getAllTasksByTitle(title: String): Flow<List<Task>>
 
     fun getTaskStream(id: Int): Flow<Task?>
 

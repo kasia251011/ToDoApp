@@ -10,14 +10,9 @@ import com.example.todoapp.data.TasksRepository
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.example.todoapp.ui.task.details.TaskDetailsDestination
-import com.example.todoapp.ui.task.details.TaskDetailsUiState
-import com.example.todoapp.ui.task.details.toTaskUiState
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -38,7 +33,6 @@ class EditTaskViewModel(
     init {
         viewModelScope.launch {
             viewModelScope.launch {
-                println("EDIT-----------------$taskId")
                 editTaskUiState = tasksRepository.getTaskStream(taskId)
                     .filterNotNull()
                     .first()
@@ -54,7 +48,6 @@ class EditTaskViewModel(
 
     suspend fun updateTask() {
         if (validateInput()) {
-//            updateTaskUiState(editTaskUiState.task.copy(createDateTime = Calendar.getInstance()))
             tasksRepository.updateTask(editTaskUiState.task)
         }
     }

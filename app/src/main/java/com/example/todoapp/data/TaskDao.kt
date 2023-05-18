@@ -1,13 +1,20 @@
 package com.example.todoapp.data
 
 import androidx.room.*
+import com.example.todoapp.Category
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
     //TODO: Change sorting by dueDate
     @Query("SELECT * from task ORDER BY dueDateTime ASC")
-    fun getAllNotFinishedTasks(): Flow<List<Task>>
+    fun getAllTasks(): Flow<List<Task>>
+
+    @Query("SELECT * from task WHERE category IN(:categories) ORDER BY dueDateTime ASC")
+    fun getAllTasksByCategories(categories: Array<String?>): Flow<List<Task>>
+
+    @Query("SELECT * from task WHERE title LIKE '%' || :title || '%' ORDER BY dueDateTime ASC")
+    fun getAllTasksByTitle(title: String): Flow<List<Task>>
 
     @Query("SELECT * from task WHERE id = :id")
     fun getTask(id: Int): Flow<Task>

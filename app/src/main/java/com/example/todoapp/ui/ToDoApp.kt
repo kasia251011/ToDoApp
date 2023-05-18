@@ -26,13 +26,13 @@ fun ToDoApp(navController: NavHostController = rememberNavController()) {
 fun ToDoTopAppBar(
     title: String,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit = {},
+    navigateBack: () -> Unit = {},
 ) {
     if (canNavigateBack) {
         TopAppBar(
             title = { Text(title, fontSize = 15.sp) },
             navigationIcon = {
-                IconButton(onClick = navigateUp) {
+                IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back"

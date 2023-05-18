@@ -1,30 +1,58 @@
 package com.example.todoapp.ui.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todoapp.Category
 import com.example.todoapp.data.Task
 import com.example.todoapp.data.TasksRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class HomeViewModel(tasksRepository: TasksRepository) : ViewModel() {
+class HomeViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
 
-    /**
-     * Holds home ui state. The list of items are retrieved from [TasksRepository] and mapped to
-     * [HomeUiState]
-     */
-    val homeUiState: StateFlow<HomeUiState> =
-        tasksRepository.getAllNotFinishedTasksStream().map { HomeUiState(it) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = HomeUiState()
-            )
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState: StateFlow<HomeUiState> = _uiState
+    var filtersState by mutableStateOf(FiltersState())
+        private set
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
+    init {
+        viewModelScope.launch {
+            tasksRepository.getAllTasksStream()
+                .collect { tasks ->
+                    _uiState.value = HomeUiState(tasks)
+                }
+        }
+    }
+
+
+    fun filterTasks(searchText: String?, categories: List<String>?, doneTasksVisible: Boolean?) {
+
+        filtersState = FiltersState(
+            searchText ?: filtersState.searchText,
+            categories ?: filtersState.categories,
+            doneTasksVisible ?: filtersState.onlyDoneTasksVisible)
+
+        viewModelScope.launch {
+            tasksRepository.getAllTasksStream()
+                .collect { tasks ->
+                    _uiState.value = HomeUiState(tasks)
+                    _uiState.value = HomeUiState(_uiState.value.itemList.filter{
+                            task -> task.title.contains(filtersState.searchText)
+                    })
+                    _uiState.value = HomeUiState(_uiState.value.itemList.filter{
+                            task -> filtersState.categories.contains(task.category)
+                    })
+                    if(filtersState.onlyDoneTasksVisible) {
+                        _uiState.value = HomeUiState(_uiState.value.itemList.filter{
+                                task -> task.isDone
+                        })
+                    }
+                }
+        }
+
     }
 }
 
@@ -32,3 +60,8 @@ class HomeViewModel(tasksRepository: TasksRepository) : ViewModel() {
  * Ui State for HomeScreen
  */
 data class HomeUiState(val itemList: List<Task> = listOf())
+data class FiltersState(
+    val searchText: String = "",
+    val categories: List<String> = listOf(Category.School.name,Category.Other.name, Category.Office.name, Category.Home.name ),
+    val onlyDoneTasksVisible: Boolean = false
+)

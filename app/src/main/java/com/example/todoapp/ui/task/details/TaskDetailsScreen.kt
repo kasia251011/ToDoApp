@@ -35,7 +35,7 @@ fun TaskDetailsScreen(
     navigateBack: () -> Unit,
     viewModel: TaskDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val task = viewModel.uiState.task
+    val taskDetailsUiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -44,12 +44,12 @@ fun TaskDetailsScreen(
                 navigateBack = navigateBack,
                 deleteTask = { },
                 navigate = navigate,
-                task = task
+                task = taskDetailsUiState.task
             )
         }
     ) { innerPadding ->
         TaskDetailsBody(
-            task = task,
+            task = taskDetailsUiState.task,
             onDelete = {
                 coroutineScope.launch {
                     viewModel.deleteTask()
