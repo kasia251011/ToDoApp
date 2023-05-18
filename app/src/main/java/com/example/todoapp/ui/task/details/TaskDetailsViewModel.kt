@@ -27,7 +27,7 @@ class TaskDetailsViewModel (
         viewModelScope.launch {
             tasksRepository.getTaskStream(taskId)
                 .collect { task ->
-                    _uiState.value = task?.let { TaskDetailsUiState(it) }!!
+                    _uiState.value = task?.let { TaskDetailsUiState(it) } ?: TaskDetailsUiState()
                 }
         }
     }
@@ -39,7 +39,10 @@ class TaskDetailsViewModel (
     }
 
     suspend fun deleteTask() {
-        tasksRepository.deleteTask(uiState.value.task)
+
+        viewModelScope.launch {
+            tasksRepository.deleteTask(uiState.value.task)
+        }
     }
 
 }

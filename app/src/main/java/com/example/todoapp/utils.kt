@@ -10,6 +10,10 @@ fun capitalizeWords(text: String): String {
         .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
 }
 
+fun fillWith0(number: Int): String {
+    return if (number < 10) "0$number" else number.toString()
+}
+
 @SuppressLint("SimpleDateFormat")
 fun calendarToString(calendar: Calendar): String {
     val sdf = SimpleDateFormat("dd/MM/yy hh:mm")

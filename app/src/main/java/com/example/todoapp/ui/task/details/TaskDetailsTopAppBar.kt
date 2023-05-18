@@ -1,17 +1,18 @@
-package com.example.todoapp.ui.task.edit
+package com.example.todoapp.ui.task.details
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.data.Task
+import com.example.todoapp.ui.task.edit.EditTaskDestination
 
 @Composable
 fun TaskDetailsAppBar(
@@ -26,8 +27,8 @@ fun TaskDetailsAppBar(
         navigationIcon = {
             IconButton(onClick = navigateBack) {
                 Icon(
-                    imageVector = Icons.Filled.Clear,
-                    contentDescription = "Cancel"
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
                 )
             }
         },

@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.R
 import com.example.todoapp.data.Task
+import com.example.todoapp.fillWith0
 import com.example.todoapp.ui.theme.Black
 import java.util.*
 
@@ -47,11 +48,15 @@ fun DatePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
     val dayOfMonth = task.dueDateTime[Calendar.DAY_OF_MONTH]
 
     var selectedDateText by remember { mutableStateOf("$dayOfMonth/$month/$year") }
+    val formattedDay = fillWith0(dayOfMonth)
+    val formattedMonth = fillWith0(month + 1)
+    val formattedYear = year.toString().drop(2)
+    selectedDateText =
+        "$formattedDay/${formattedMonth}/$formattedYear"
 
     val datePicker = DatePickerDialog(
         context,
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-
             val newTask = task.copy()
             newTask.dueDateTime.set(Calendar.YEAR, selectedYear)
             newTask.dueDateTime.set(Calendar.MONTH, selectedMonth)
@@ -59,11 +64,11 @@ fun DatePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
 
             updateTaskUiState(newTask)
 
-            val formattedDay = if (selectedDayOfMonth + 1 < 10) "0$selectedDayOfMonth" else selectedDayOfMonth
-            val formattedMonth = if (selectedMonth + 1 < 10) "0$selectedMonth" else selectedMonth
-            val formattedYear = selectedYear.toString().drop(2)
+            val formattedDayy = fillWith0(selectedDayOfMonth)
+            val formattedMonthh = fillWith0(selectedMonth + 1)
+            val formattedYearr = selectedYear.toString().drop(2)
             selectedDateText =
-                "$formattedDay/${formattedMonth}/$formattedYear"
+                "$formattedDayy/${formattedMonthh}/$formattedYearr"
         }, year, month, dayOfMonth
     )
 
@@ -79,6 +84,7 @@ fun TimePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
     val minute = task.dueDateTime[Calendar.MINUTE]
 
     var selectedTimeText by remember { mutableStateOf("$hour:$minute") }
+    selectedTimeText = "${fillWith0(minute)}:${fillWith0(hour)}"
 
     val timePicker = TimePickerDialog(
         context,
@@ -90,7 +96,7 @@ fun TimePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
 
             updateTaskUiState(newTask)
 
-            selectedTimeText = "$selectedHour:${if (selectedMinute < 10) "00" else selectedMinute}"
+            selectedTimeText = "${fillWith0(selectedMinute)}:${fillWith0(selectedMinute)}"
         }, hour, minute, false
     )
 

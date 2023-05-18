@@ -6,9 +6,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.data.Task
@@ -16,10 +14,8 @@ import com.example.todoapp.ui.AppViewModelProvider
 import com.example.todoapp.ui.navigation.NavigationDestination
 import com.example.todoapp.ui.task.details.components.TaskDates
 import com.example.todoapp.ui.task.details.components.TaskHeader
-import com.example.todoapp.ui.task.edit.TaskDetailsAppBar
 import com.example.todoapp.ui.theme.*
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 object TaskDetailsDestination : NavigationDestination {
     override val route = "task_details"
@@ -42,20 +38,20 @@ fun TaskDetailsScreen(
         topBar = {
             TaskDetailsAppBar(
                 navigateBack = navigateBack,
-                deleteTask = { },
+                deleteTask = {
+                    coroutineScope.launch {
+                        navigateBack()
+                        viewModel.deleteTask()
+
+                    }
+                },
                 navigate = navigate,
-                task = taskDetailsUiState.task
+                task = taskDetailsUiState.task,
             )
         }
     ) { innerPadding ->
         TaskDetailsBody(
             task = taskDetailsUiState.task,
-            onDelete = {
-                coroutineScope.launch {
-                    viewModel.deleteTask()
-                    navigateBack()
-                }
-            },
             modifier = Modifier.padding(innerPadding),
             updateState = viewModel::updateState
         )
@@ -66,7 +62,6 @@ fun TaskDetailsScreen(
 @Composable
 private fun TaskDetailsBody(
     task: Task,
-    onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     updateState: (Task) -> Unit
 ) {
@@ -76,7 +71,6 @@ private fun TaskDetailsBody(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
         TaskHeader(task, updateState)
         Text(task.description)
@@ -84,66 +78,5 @@ private fun TaskDetailsBody(
         Divider(color = LightGrey)
         //TODO: Display files
 
-
-        if (deleteConfirmationRequired) {
-            DeleteConfirmationDialog(
-                onDeleteConfirm = {
-                    deleteConfirmationRequired = false
-                    onDelete()
-                },
-                onDeleteCancel = { deleteConfirmationRequired = false }
-            )
-        }
-    }
-}
-
-
-
-
-
-@Composable
-private fun DeleteConfirmationDialog(
-    onDeleteConfirm: () -> Unit,
-    onDeleteCancel: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    AlertDialog(
-        onDismissRequest = { /* Do nothing */ },
-        title = { Text("Delete task") },
-        text = { Text("Are you sure you want to delete?") },
-        modifier = modifier.padding(16.dp),
-        dismissButton = {
-            TextButton(onClick = onDeleteCancel) {
-                Text("Cancel")
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDeleteConfirm) {
-                Text("Delete")
-            }
-        }
-    )
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun ItemDetailsScreenPreview() {
-    ToDoAppTheme {
-        val defaultDate =  Calendar.getInstance()
-        TaskDetailsBody(
-            task = Task(
-                3,
-                "Read Book",
-                "Finish reading 'The Great Gatsby' novel by F. Scott Fitzgerald.",
-                defaultDate,
-                defaultDate,
-                isDone = false,
-                isNotificationEnable = false,
-                "Leisure"
-            ),
-            onDelete = {},
-            updateState = {}
-        )
     }
 }

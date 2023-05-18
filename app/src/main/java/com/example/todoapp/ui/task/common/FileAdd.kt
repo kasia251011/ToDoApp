@@ -1,5 +1,8 @@
 package com.example.todoapp.ui.task.common
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,6 +20,13 @@ import com.example.todoapp.ui.theme.Black
 
 @Composable
 fun FileAdd(task: Task, updateState: (Task) -> Unit) {
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+    ) { uri: Uri? ->
+        //TODO: Handle the selected file URI and perform upload to the database
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -34,7 +44,7 @@ fun FileAdd(task: Task, updateState: (Task) -> Unit) {
             Text("Attachments")
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton({ launcher.launch("image/*") }) {
             Icon(
                 imageVector = Icons.Filled.Add,
                 contentDescription = "Add file"
