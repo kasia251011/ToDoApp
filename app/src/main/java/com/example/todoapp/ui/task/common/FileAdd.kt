@@ -78,7 +78,7 @@ fun FileAdd(task: Task, updateState: (Task) -> Unit) {
             }
 
             IconButton({
-                pickPictureLauncher.launch("image/*")
+                pickPictureLauncher.launch("*/*")
             }) {
                 Icon(
                     imageVector = Icons.Filled.Add,
