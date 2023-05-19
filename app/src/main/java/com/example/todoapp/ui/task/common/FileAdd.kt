@@ -41,8 +41,6 @@ import java.io.InputStream
 @SuppressLint("Recycle")
 @Composable
 fun FileAdd(task: Task, updateState: (Task) -> Unit) {
-
-    var loadedFile by remember { mutableStateOf<ByteArray?>(null) }
     val context = LocalContext.current
     val contentResolver: ContentResolver = context.contentResolver
     val coroutineScope = rememberCoroutineScope()
@@ -54,7 +52,7 @@ fun FileAdd(task: Task, updateState: (Task) -> Unit) {
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
                     val inputStream: InputStream = contentResolver.openInputStream(uri) ?: return@withContext
-                    loadedFile = inputStream.readBytes()
+                    updateState(task.copy(file = inputStream.readBytes()))
                     inputStream.close()
                 }
             }
@@ -88,64 +86,11 @@ fun FileAdd(task: Task, updateState: (Task) -> Unit) {
                 )
             }
         }
-        if(loadedFile != null) {
-            ImageCard(loadedFile!! ,setLoadedFile = {loadedFile = it})
+        if(task.file?.isNotEmpty() == true) {
+            ImageCard(
+                task.file ,
+                setLoadedFile = {updateState(task.copy(file = null))},
+                true)
         }
-
-    }
-
-
-}
-
-fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
-    return BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
-}
-
-
-@Composable
-fun ImageCard(loadedFile: ByteArray, setLoadedFile: (ByteArray?) -> Unit) {
-    Card(
-        shape = RoundedCornerShape(10.dp),
-        elevation = 5.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .padding(top = 16.dp)
-    ) {
-        Box() {
-            Image(
-                bitmap = convertImageByteArrayToBitmap(loadedFile).asImageBitmap(),
-                contentDescription = null, // Provide a meaningful description if needed
-                contentScale = ContentScale.Crop
-            )
-            Box(contentAlignment = Alignment.BottomStart,
-            modifier = Modifier.fillMaxSize()) {
-                Row(
-                    modifier = Modifier
-                        .background(color = Color.Black.copy(alpha = 0.5F))
-                        .fillMaxWidth()
-                        .height(45.dp)
-                ){}
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 15.dp)
-                ) {
-                    Text("Forest.png", color = Color.White)
-                    IconButton({setLoadedFile(null)}) {
-                        Icon(
-                            imageVector = Icons.Filled.Clear,
-                            contentDescription = "Cancel",
-                            tint = Color.White
-                        )
-                    }
-
-                }
-            }
-
-        }
-
     }
 }

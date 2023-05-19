@@ -28,14 +28,14 @@ fun TaskHeader(
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(25.dp)
     ) {
         Column {
             Text(task.title, style = MaterialTheme.typography.h1)
             Text(
                 task.category,
                 color = DarkGrey,
-                modifier =  Modifier.padding(top = 5.dp))
+                modifier =  Modifier.padding(top = 5.dp).height(200.dp))
         }
         if(task.isDone) {
             Box(

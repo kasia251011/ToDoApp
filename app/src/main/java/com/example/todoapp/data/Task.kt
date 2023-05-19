@@ -1,12 +1,13 @@
 package com.example.todoapp.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 import java.util.*
 
+@Suppress("ArrayInDataClass")
 @Entity
-data class Task (
+data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
@@ -16,5 +17,6 @@ data class Task (
     var isDone: Boolean,
     val isNotificationEnable: Boolean,
     val category: String,
-    val filePath: String,
+    @ColumnInfo(name = "file",typeAffinity = ColumnInfo.BLOB)
+    val file: ByteArray?,
 )

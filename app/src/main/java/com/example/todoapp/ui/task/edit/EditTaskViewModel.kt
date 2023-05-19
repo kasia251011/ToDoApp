@@ -74,7 +74,7 @@ data class EditTaskUiState constructor(
         isDone = false,
         isNotificationEnable = false,
         "",
-    ""),
+    null),
     val isEntryValid: Boolean = false
 )
 

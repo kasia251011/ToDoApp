@@ -10,8 +10,6 @@ import com.example.todoapp.data.TasksRepository
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -64,7 +62,7 @@ data class AddTaskUiState constructor(
         isDone = false,
         isNotificationEnable = false,
         "",
-        ""),
+        null),
     val isEntryValid: Boolean = false
 )
 

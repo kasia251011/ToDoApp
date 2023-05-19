@@ -12,6 +12,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
 import com.example.todoapp.ui.navigation.NavigationDestination
+import com.example.todoapp.ui.task.common.ImageCard
+import com.example.todoapp.ui.task.details.components.Attachments
 import com.example.todoapp.ui.task.details.components.TaskDates
 import com.example.todoapp.ui.task.details.components.TaskHeader
 import com.example.todoapp.ui.theme.*
@@ -67,16 +69,14 @@ private fun TaskDetailsBody(
 ) {
     Column(
         modifier = modifier
-            .padding(25.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
         TaskHeader(task, updateState)
         Text(task.description)
         TaskDates(task)
         Divider(color = LightGrey)
-        //TODO: Display files
+        Attachments(task)
 
     }
 }

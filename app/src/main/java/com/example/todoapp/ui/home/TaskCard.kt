@@ -38,6 +38,9 @@ fun TaskCard(
     task: Task,
     onTaskClick: (String) -> Unit,
 ) {
+
+    val isAttachment = task.file != null
+
     Column(
         Modifier
             .padding(0.dp)
@@ -84,14 +87,17 @@ fun TaskCard(
                 color = DarkGrey,
                 fontSize = 15.sp
             )
-            Row(verticalAlignment = Alignment.CenterVertically,) {
-                Icon(
-                    painter = painterResource(R.drawable.attachemnt),
-                    "attachment",
-                    tint = DarkGrey,
-                    modifier = Modifier.size(15.dp)
-                )
-                Text("0 Attachments", Modifier.padding(start = 10.dp), color = DarkGrey, fontSize = 15.sp)
+            //TODO: Display number of attachments
+            if(isAttachment) {
+                Row(verticalAlignment = Alignment.CenterVertically,) {
+                    Icon(
+                        painter = painterResource(R.drawable.attachemnt),
+                        "attachment",
+                        tint = DarkGrey,
+                        modifier = Modifier.size(15.dp)
+                    )
+                    Text("1 Attachments", Modifier.padding(start = 10.dp), color = DarkGrey, fontSize = 15.sp)
+                }
             }
         }
     }

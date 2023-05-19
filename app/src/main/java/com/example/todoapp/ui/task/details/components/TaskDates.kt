@@ -6,10 +6,12 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.calendarToString
 import com.example.todoapp.data.Task
@@ -24,7 +26,7 @@ fun TaskDates(task: Task) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(25.dp)
     ) {
         Text("Due: ${calendarToString(task.dueDateTime)}")
         Text("Created: ${calendarToString(task.dueDateTime)}", color = Grey, fontSize = 10.sp)

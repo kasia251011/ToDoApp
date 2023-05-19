@@ -58,5 +58,5 @@ data class TaskDetailsUiState  constructor(
         isDone = false,
         isNotificationEnable = false,
         "",
-    ""),
+    null),
 )

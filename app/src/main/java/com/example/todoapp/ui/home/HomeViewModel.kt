@@ -47,7 +47,7 @@ class HomeViewModel(private val tasksRepository: TasksRepository) : ViewModel() 
                     })
                     if(filtersState.onlyDoneTasksVisible) {
                         _uiState.value = HomeUiState(_uiState.value.itemList.filter{
-                                task -> task.isDone
+                                task -> !task.isDone
                         })
                     }
                 }
