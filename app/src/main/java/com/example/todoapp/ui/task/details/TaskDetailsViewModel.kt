@@ -57,5 +57,6 @@ data class TaskDetailsUiState  constructor(
         Calendar.getInstance(),
         isDone = false,
         isNotificationEnable = false,
-        ""),
+        "",
+    ""),
 )

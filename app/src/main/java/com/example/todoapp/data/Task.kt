@@ -16,5 +16,5 @@ data class Task (
     var isDone: Boolean,
     val isNotificationEnable: Boolean,
     val category: String,
-    //TODO: Add Attachments
+    val filePath: String,
 )

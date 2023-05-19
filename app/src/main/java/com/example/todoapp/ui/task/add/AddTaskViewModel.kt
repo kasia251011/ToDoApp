@@ -59,10 +59,11 @@ data class AddTaskUiState constructor(
         0,
         "",
         "",
-       Calendar.getInstance(),
+        Calendar.getInstance(),
         Calendar.getInstance(),
         isDone = false,
         isNotificationEnable = false,
+        "",
         ""),
     val isEntryValid: Boolean = false
 )

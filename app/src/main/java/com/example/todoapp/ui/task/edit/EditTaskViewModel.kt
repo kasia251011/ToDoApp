@@ -73,7 +73,8 @@ data class EditTaskUiState constructor(
         Calendar.getInstance(),
         isDone = false,
         isNotificationEnable = false,
-        ""),
+        "",
+    ""),
     val isEntryValid: Boolean = false
 )
 

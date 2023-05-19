@@ -1,5 +1,6 @@
 package com.example.todoapp.ui.task.add
 
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
@@ -49,7 +50,7 @@ fun AddTaskScreen(
         AddTaskBody(
             task = viewModel.addTaskUiState.task,
             updateTaskUiState = viewModel::updateTaskUiState,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding)
         )
     }
 }
@@ -59,7 +60,7 @@ fun AddTaskScreen(
 fun AddTaskBody(
     task: Task,
     updateTaskUiState: (Task) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier
 ) {
     Column(
         modifier = modifier
