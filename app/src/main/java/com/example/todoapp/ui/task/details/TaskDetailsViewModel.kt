@@ -1,10 +1,12 @@
 package com.example.todoapp.ui.task.details
 
+import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.example.todoapp.data.Task
 import com.example.todoapp.data.TasksRepository
 import kotlinx.coroutines.flow.*
@@ -15,9 +17,10 @@ import java.util.*
 class TaskDetailsViewModel (
     savedStateHandle: SavedStateHandle,
     private val tasksRepository: TasksRepository,
+    application: Application
 ) : ViewModel() {
 
-
+    private val workManager = WorkManager.getInstance(application)
     private val _uiState = MutableStateFlow(TaskDetailsUiState())
     val uiState: StateFlow<TaskDetailsUiState> = _uiState
 
@@ -41,6 +44,7 @@ class TaskDetailsViewModel (
     suspend fun deleteTask() {
 
         viewModelScope.launch {
+            uiState.value.task.notificationId?.let { workManager.cancelWorkById(it) }
             tasksRepository.deleteTask(uiState.value.task)
         }
     }
@@ -58,5 +62,7 @@ data class TaskDetailsUiState  constructor(
         isDone = false,
         isNotificationEnable = false,
         "",
-    null),
+    null,
+        null
+    ),
 )

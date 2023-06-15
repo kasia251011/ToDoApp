@@ -19,4 +19,5 @@ data class Task(
     val category: String,
     @ColumnInfo(name = "file",typeAffinity = ColumnInfo.BLOB)
     val file: ByteArray?,
+    val notificationId: UUID?
 )

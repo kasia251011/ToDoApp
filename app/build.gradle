@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp' version "1.8.0-1.0.9"
+    id 'kotlin-kapt'
 }
 
 android {
@@ -67,4 +68,16 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     implementation 'io.coil-kt:coil-compose:1.4.0'
 
+    // work manager
+    implementation("androidx.work:work-runtime-ktx:$work_version")
+
+    // coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycleVersion"
+    // Lifecycle utilities for Compose
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$rootProject.lifecycleVersion"
 }

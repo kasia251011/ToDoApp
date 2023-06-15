@@ -84,7 +84,7 @@ fun TimePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
     val minute = task.dueDateTime[Calendar.MINUTE]
 
     var selectedTimeText by remember { mutableStateOf("$hour:$minute") }
-    selectedTimeText = "${fillWith0(minute)}:${fillWith0(hour)}"
+    selectedTimeText = "${fillWith0(hour)}:${fillWith0(minute)}"
 
     val timePicker = TimePickerDialog(
         context,
@@ -96,7 +96,7 @@ fun TimePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
 
             updateTaskUiState(newTask)
 
-            selectedTimeText = "${fillWith0(selectedMinute)}:${fillWith0(selectedMinute)}"
+            selectedTimeText = "${fillWith0(selectedHour)}:${fillWith0(selectedMinute)}"
         }, hour, minute, false
     )
 

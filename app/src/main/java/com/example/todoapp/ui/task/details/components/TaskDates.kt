@@ -29,6 +29,6 @@ fun TaskDates(task: Task) {
         modifier = Modifier.fillMaxWidth().padding(25.dp)
     ) {
         Text("Due: ${calendarToString(task.dueDateTime)}")
-        Text("Created: ${calendarToString(task.dueDateTime)}", color = Grey, fontSize = 10.sp)
+        Text("Created: ${calendarToString(task.createDateTime)}", color = Grey, fontSize = 10.sp)
     }
 }

@@ -20,7 +20,7 @@ object AppViewModelProvider {
         // Initializer for ItemEditViewModel
         initializer {
             AddTaskViewModel(
-                toDoApplication().container.tasksRepository
+                toDoApplication().container.tasksRepository, toDoApplication()
             )
         }
 
@@ -32,14 +32,14 @@ object AppViewModelProvider {
         initializer {
             TaskDetailsViewModel(
                 this.createSavedStateHandle(),
-                toDoApplication().container.tasksRepository
+                toDoApplication().container.tasksRepository, toDoApplication()
             )
         }
 
         initializer {
             EditTaskViewModel(
                 this.createSavedStateHandle(),
-                toDoApplication().container.tasksRepository
+                toDoApplication().container.tasksRepository, toDoApplication()
             )
         }
     }
