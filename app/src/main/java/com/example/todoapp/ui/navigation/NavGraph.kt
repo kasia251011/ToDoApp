@@ -46,7 +46,8 @@ fun ToDoNavHost(
         }
         composable(route = AddTaskDestination.route) {
             AddTaskScreen(
-                navigateBack = { navController.popBackStack() }
+                navigateBack = { navController.popBackStack() },
+                homeViewModel = homeViewModel
             )
         }
         composable(
@@ -70,7 +71,8 @@ fun ToDoNavHost(
         ) {
             EditTaskScreen(
                 onNavigateUp = { navController.navigateUp() },
-                navigateBack = { navController.navigateUp() }
+                navigateBack = { navController.navigateUp() },
+                homeViewModel = homeViewModel
             )
         }
         composable(route = SettingsDestination.route) {

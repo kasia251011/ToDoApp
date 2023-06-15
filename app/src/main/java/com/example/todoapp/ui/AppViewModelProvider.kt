@@ -26,7 +26,7 @@ object AppViewModelProvider {
 
         // Initializer for HomeViewModel
         initializer {
-            HomeViewModel(toDoApplication().container.tasksRepository)
+            HomeViewModel(toDoApplication().container.tasksRepository, toDoApplication())
         }
 
         initializer {

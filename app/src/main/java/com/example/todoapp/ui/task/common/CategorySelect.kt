@@ -24,7 +24,7 @@ fun CategorySelect (
 ) {
     var expanded by remember { mutableStateOf(false) }
     val categoryOptions = listOf(Category.Home, Category.Office, Category.Other, Category.School)
-    var selectedOptionText by remember { mutableStateOf(categoryOptions[0].name) }
+    var selectedOptionText by remember { mutableStateOf(task.category) }
 
     onValueChange(task.copy(category = selectedOptionText))
 

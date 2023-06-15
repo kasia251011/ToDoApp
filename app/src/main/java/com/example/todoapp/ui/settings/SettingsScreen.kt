@@ -23,8 +23,10 @@ import com.example.todoapp.ui.theme.LightGrey
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import com.example.todoapp.Category
+import com.example.todoapp.Delay
 import com.example.todoapp.ui.home.FiltersState
 import com.example.todoapp.ui.settings.components.HideNotFinishedTasks
+import com.example.todoapp.ui.settings.components.NotificationDelaySelect
 import com.example.todoapp.ui.settings.components.VisibleCategoryToggle
 
 object SettingsDestination : NavigationDestination {
@@ -47,22 +49,27 @@ fun SettingsScreen(
         SettingsBody(
             modifier = Modifier.padding(innerPadding),
             filterTasks = viewModel::filterTasks,
-            filtersState = viewModel.filtersState
+            filtersState = viewModel.filtersState,
+            rescheduleNotifications =  viewModel::rescheduleTasks,
+            oldDelay = viewModel.delayState,
         )
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsBody (
     modifier: Modifier = Modifier,
     filterTasks: (String?, List<String>?, Boolean?) -> Unit,
     filtersState: FiltersState,
+    rescheduleNotifications: (Delay) -> Unit = {},
+    oldDelay: Delay,
 ) {
     Column {
         HideNotFinishedTasks(filterTasks, filtersState)
         Divider(color = LightGrey)
-//        Notifications()
-//        Divider(color = LightGrey)
+        NotificationDelaySelect( oldDelay,rescheduleNotifications)
+        Divider(color = LightGrey)
         Column() {
             Text(
                 "Visible categories",

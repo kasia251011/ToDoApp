@@ -97,7 +97,7 @@ fun TimePicker(task: Task, updateTaskUiState: (Task) -> Unit) {
             updateTaskUiState(newTask)
 
             selectedTimeText = "${fillWith0(selectedHour)}:${fillWith0(selectedMinute)}"
-        }, hour, minute, false
+        }, hour, minute, true
     )
 
     Text(selectedTimeText, Modifier.clickable { timePicker.show() })

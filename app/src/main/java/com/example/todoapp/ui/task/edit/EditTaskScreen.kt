@@ -7,15 +7,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
+import com.example.todoapp.ui.home.HomeViewModel
 import com.example.todoapp.ui.navigation.NavigationDestination
 import com.example.todoapp.ui.task.common.*
 import com.example.todoapp.ui.theme.LightGrey
-import com.example.todoapp.ui.theme.ToDoAppTheme
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -31,7 +30,8 @@ object EditTaskDestination : NavigationDestination {
 fun EditTaskScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
-    viewModel: EditTaskViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: EditTaskViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    homeViewModel: HomeViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -42,7 +42,7 @@ fun EditTaskScreen(
                 actionEnabled = viewModel.editTaskUiState.isEntryValid,
                 handleAction = {
                     coroutineScope.launch {
-                        viewModel.updateTask()
+                        viewModel.updateTask(homeViewModel.delayState)
                         navigateBack()
                     }
                 }
@@ -82,15 +82,5 @@ fun AddTaskBody(
             Divider(color = LightGrey)
             FileAdd(task, updateTaskUiState )
         }
-    }
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun ItemEditRoutePreview() {
-    ToDoAppTheme {
-        EditTaskScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
     }
 }

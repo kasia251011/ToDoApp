@@ -46,6 +46,7 @@ class TaskDetailsViewModel (
         viewModelScope.launch {
             uiState.value.task.notificationId?.let { workManager.cancelWorkById(it) }
             tasksRepository.deleteTask(uiState.value.task)
+
         }
     }
 

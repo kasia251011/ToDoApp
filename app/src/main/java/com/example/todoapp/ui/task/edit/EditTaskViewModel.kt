@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.example.todoapp.Delay
 import com.example.todoapp.ui.notification.ReminderWorker
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -53,10 +54,11 @@ class EditTaskViewModel(
     }
 
 
-    suspend fun updateTask() {
+    suspend fun updateTask(delayState: Delay) {
         if (validateInput()) {
             if (editTaskUiState.task.isNotificationEnable) {
-                scheduleReminder(editTaskUiState.task)
+                editTaskUiState.task.notificationId?.let { workManager.cancelWorkById(it) }
+                scheduleReminder(editTaskUiState.task, delayState.value)
             } else {
                 editTaskUiState.task.notificationId?.let { workManager.cancelWorkById(it) }
                 updateTaskUiState(editTaskUiState.task.copy(notificationId = null))
@@ -72,7 +74,8 @@ class EditTaskViewModel(
     }
 
     private fun scheduleReminder(
-        task: Task
+        task: Task,
+        delay: Long
     ) {
         // create a Data instance with the task title passed to it
         val myWorkRequestBuilder = OneTimeWorkRequestBuilder<ReminderWorker>()
@@ -82,7 +85,7 @@ class EditTaskViewModel(
             )
         )
 
-        val duration = task.dueDateTime.timeInMillis -  System.currentTimeMillis()
+        val duration = task.dueDateTime.timeInMillis -  System.currentTimeMillis() - delay
 
         myWorkRequestBuilder.setInitialDelay(duration, TimeUnit.MILLISECONDS)
         val work = myWorkRequestBuilder.build()

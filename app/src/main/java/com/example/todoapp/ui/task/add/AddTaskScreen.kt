@@ -1,6 +1,5 @@
 package com.example.todoapp.ui.task.add
 
-import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
@@ -13,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.data.Task
 import com.example.todoapp.ui.AppViewModelProvider
+import com.example.todoapp.ui.home.HomeViewModel
 import com.example.todoapp.ui.navigation.NavigationDestination
 import com.example.todoapp.ui.task.common.*
 import com.example.todoapp.ui.theme.LightGrey
@@ -29,7 +29,8 @@ object AddTaskDestination : NavigationDestination {
 @Composable
 fun AddTaskScreen(
     navigateBack: () -> Unit,
-    viewModel: AddTaskViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: AddTaskViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    homeViewModel: HomeViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -40,7 +41,7 @@ fun AddTaskScreen(
                 actionEnabled = viewModel.addTaskUiState.isEntryValid,
                 handleAction = {
                     coroutineScope.launch {
-                        viewModel.saveTask()
+                        viewModel.saveTask(homeViewModel.delayState)
                         navigateBack()
                     }
                 }
@@ -80,16 +81,5 @@ fun AddTaskBody(
             Divider(color = LightGrey)
             FileAdd(task, updateTaskUiState )
         }
-    }
-}
-
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun ItemEditRoutePreview() {
-    ToDoAppTheme {
-        AddTaskScreen(navigateBack = { /*Do nothing*/ })
     }
 }

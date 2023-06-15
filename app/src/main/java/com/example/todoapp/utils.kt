@@ -18,7 +18,7 @@ fun fillWith0(number: Int): String {
 
 @SuppressLint("SimpleDateFormat")
 fun calendarToString(calendar: Calendar): String {
-    val sdf = SimpleDateFormat("dd/MM/yy hh:mm")
+    val sdf = SimpleDateFormat("dd/MM/yy HH:mm")
     return sdf.format(calendar.time)
 }
 
